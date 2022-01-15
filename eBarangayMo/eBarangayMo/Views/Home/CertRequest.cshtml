@@ -1,0 +1,80 @@
+﻿@model eBarangayMo.Models.CertificateRequestModel
+@{
+    ViewBag.Title = "CertRequest";
+}
+
+<html>
+<body>
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card shadow-lg mb-4">
+                <div class="card-header">
+                    <div class="form-group d-flex justify-content-between">
+                        <h3 class="text-center font-weight-light my-2">&nbsp;</h3>
+                        <h3 class="font-weight-light my-2">Certificate Request</h3>
+                        <input class=" btn font-weight-bolder text-dark" id="btnclose" type="button" value="X" />
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="requestTypeForm" method="post" action="">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label for="certType">Type of certificate</label>
+                                <div class="form-group">
+                                    @Html.DropDownList("Type", ViewBag.VBtypelist as SelectList, "--Select Type--", new { @class = "form-control", onchange = "document.getElementById('requestTypeForm').submit();" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtPrice">Price</label>
+                                <div class="form-group">
+                                    <input class="form-control" id="txtPrice" type="text" value="@Model.price" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="txtPurpose">Purpose</label>
+                                <div class="form-group">
+                                    <input class="form-control" id="txtPurpose" name="purpose" type="text" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="txtUnit">Number of copies</label>
+                                <div class="form-group">
+                                    <input class="form-control" id="txtUnit" name="copies" type="number" min="1" value="@Model.copies" required onchange="updateTotalAmount();"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txtAmount">Total Amount</label>
+                                <div class="form-group">
+                                    <input class="form-control" id="txtAmount" type="text" value="@( Model.price * Model.copies )" readonly />
+                                </div>
+                            </div>
+                        </div><br />
+                        <div class="row">
+                            <div class="col-md-6 ml-auto">
+                                <div class="form-group">
+                                    <input class="btn btn-success btn-block" id="btnSubmit" type="submit" value="Send Request" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>@Model.msg</p>
+    <script>
+        function updateTotalAmount() {
+            var copies = parseInt(document.getElementById("txtUnit").value);
+            var price = parseInt(document.getElementById("txtPrice").value);            
+            document.getElementById('txtAmount').value = copies * price;
+        }
+    </script>
+</body>
+</html>
+
+
