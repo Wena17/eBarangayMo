@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "LoginUser";
+}
+
+<html>
+<head>
+    <style>
+        /*hide arrows from input number*/
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .fnt {
+            font-family: 'Bell MT';
+            font-size: 70px;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <div class="d-flex justify-content-center">
+        <div class="card w-25">
+            <div class="card-header">
+                <h4><b>Login</b></h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @*email*@
+                    <div class="col">
+                        <div class="form-group-sm">
+                            <label>Email</label>
+                            <div class="input-group-sm">
+                                <input id="txtemail" type="email" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @*password*@
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-group-sm">
+                                <input id="txtpass" type="password" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button id="btnLogin" class="btn btn-info">Login</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span>Don't' have an account?</span>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="@Url.Action("CreateAcc","Home")">Create Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/myScript/LoginUser.js"></script>
+</body>
+</html>
+
