@@ -1,0 +1,250 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<html>
+<head>
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .fnt {
+            font-family: 'Bell MT';
+            font-size: 70px;
+        }
+        .button-box {
+            width: 225px;
+            margin: 35px auto;
+            position: relative;
+            box-shadow: 0 0 15px 0px #9dd9eb;
+            border-radius: 30px;
+        }
+        .togglebtn{
+            padding: 10px 30px;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            outline: none;
+            position: relative;
+            color: white;
+        }
+        #bttn {
+            top: 0;
+            left: 0;
+            position: absolute;
+            width: 110px;
+            height: 100%;
+            background: linear-gradient(to right, #5bc0de, #9dd9eb);
+            border-radius: 30px;
+            transition: .5s;
+        }
+    </style>
+</head>
+<body style="color: white;">
+    <div class="jumbotron bg-transparent">
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="card bg-transparent border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Barangay.svg" style="width:150px; height:150px;">
+                        </div>
+                        <br />
+                        <div class="d-flex justify-content-center">
+                            <h4 style="font-size:50px; color: white;">Welcome to</h4>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <h4 style="font-size: 50px; color: white;">eBarangayMo</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                @*      LOGIN     *@
+                <div class="card" style="background-color: rgba(0,0,0,.5);">
+                    <div class="card-body">
+                        <div class="button-box">
+                            <div id="bttn"></div>
+                            <button type="button" id="btnlogin" class="togglebtn" onclick="login()">Login</button>
+                            <button type="button" id="btnregister" class="togglebtn" onclick="register()">Sign Up</button>
+                        </div>
+                        <div id="login">
+                            <div class="row">
+                                @*email*@
+                                <div class="col">
+                                    <div class="form-group-sm">
+                                        <label>Email</label>
+                                        <div class="input-group">
+                                            <input id="txtemail" type="email" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                @*password*@
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <div class="input-group">
+                                            <input id="txtpass" type="password" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button id="btnLogin" class="btn" style="background: linear-gradient(to right, #5bc0de, #9dd9eb);">Login</button>
+                            </div>
+                        </div>
+                        @*      SIGN UP     *@
+                    <div id="register" style="display:none;">
+                        <div class="row">
+                            @*last name*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtLname" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*first name*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtfname" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*middle name*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Middle Name</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtmname" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*age*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Age</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtage" type="number" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*birthdate*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Birthdate</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtbirthdate" type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*Phone Number*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtphoneNum" type="number" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*Civil Status*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Civil Status</label>
+                                    <div class="input-group-sm">
+                                        <select id="drpCivilStat" class="form-control">
+                                            <option>Single</option>
+                                            <option>Married</option>
+                                            <option>Divorced</option>
+                                            <option>Widowed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*email*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtEmail" type="email" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            @*password*@
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <div class="input-group-sm">
+                                        <input id="txtpassword" type="password" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @*barangay official*@
+                            <div class="col">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="chckBrgyOff" onclick="CheckMe()">
+                                    <label class="form-check-label">Barangay Official</label>
+                                </div>
+                            </div>
+                             @*resident*@ 
+                            <div class="col">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="chckResident">
+                                    <label class="form-check-label">Resident</label>
+                                </div>
+                            </div>
+                        </div>
+                         @*barangay official position*@ 
+                    <div id="OffRole" style="display:none;">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Barangay Official Position</label>
+                                    <div class="input-group-sm">
+                                        <select id="drpRole" class="form-control">
+                                            <option id="captain">Captain</option>
+                                            <option id="secretary">Secretary</option>
+                                            <option id="treasurer">Treasurer</option>
+                                            <option id="councilor1">1st Councilor</option>
+                                            <option id="councilor2">2nd Councilor</option>
+                                            <option id="councilor3">3rd Councilor</option>
+                                            <option id="councilor4">4th Councilor</option>
+                                            <option id="councilor5">5th Councilor</option>
+                                            <option id="councilor6">6th Councilor</option>
+                                            <option id="councilor7">7th Councilor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        @*buttons*@
+                        <div class="d-flex justify-content-center">
+                            <button id="btnCreateAcc" class="btn" style="background: linear-gradient(to right, #5bc0de, #9dd9eb);">Sign Up</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/myScripts/Index.js"></script>
+</body>
+</html>
