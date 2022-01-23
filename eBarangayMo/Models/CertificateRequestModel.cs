@@ -13,11 +13,20 @@ namespace eBarangayMo.Models
         public string name { get; set; }
         public double price { get; set; }
         public string purpose { get; set; }
-        public int copies { get; set; }
-
+        public int copies { get; set; }        
         public SelectList TypeList { get; set; }
-
         public string msg { get; set;  }
+
+
       
+    }
+    public class CertificateRequests
+    {
+        public string name { get; set; }
+        public double price { get; set; }
+        public string purpose { get; set; }
+        public int copies { get; set; }
+        public DateTime requestDate { get; set; }
+        public List<CertificateRequests> requests { get; set; }
     }
 }

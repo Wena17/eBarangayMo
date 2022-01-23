@@ -183,9 +183,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\MyScript\CertRequest.js" />
-    <Content Include="Scripts\MyScript\CreateAcc.js" />
-    <Content Include="Scripts\MyScript\LoginUser.js" />
+    <Content Include="Scripts\MyScript\brgyOffPage.js" />
+    <Content Include="Scripts\MyScript\Index.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -283,8 +282,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\IssuedCert.cshtml" />
     <Content Include="Views\Home\CertRequest.cshtml" />
-    <Content Include="Views\Home\CreateAcc.cshtml" />
-    <Content Include="Views\Home\LoginUser.cshtml" />
+    <Content Include="Views\Home\brgyOffPage.cshtml" />
+    <Content Include="Views\Home\CertRequests.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

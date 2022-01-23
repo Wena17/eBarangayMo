@@ -26,7 +26,7 @@ namespace eBarangayMo.Models
             {
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "INSERT CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES ('" + model.purpose + "'," + model.copies + ",5," + model.requestType + ")"; // TODO Use proper questy parameters. Add requestor ID from session.
+                cmd.CommandText = "INSERT CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES ('" + model.purpose + "'," + model.copies + "," + HttpContext.Current.Session["residentID"] + "," + model.requestType + ")"; // TODO Use proper questy parameters. Add requestor ID from session.
                 connBrgy.Open();
                 int count = cmd.ExecuteNonQuery();
                 connBrgy.Close();
