@@ -42,9 +42,9 @@
             });
         }
         else {
-            var username = ' ';
-            var officialID = ' ';
-            var role = ' ';
+            var username = '';
+            var officialID = '';
+            var role = '';
 
             $.post('../Home/User', {
                 lastname: lname,

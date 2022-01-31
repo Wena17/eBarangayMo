@@ -29,4 +29,16 @@ namespace eBarangayMo.Models
         public DateTime requestDate { get; set; }
         public List<CertificateRequests> requests { get; set; }
     }
+    public class Resident
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+        public DateTime bDate { get; set; }
+        public int age { get; set; }
+        public string civilStat { get; set; }
+        public string vitalStat { get; set; }
+        public string email { get; set; }
+        public string phoneNo { get; set; }
+        public List<Resident> residentsList { get; set; }
+    }
 }

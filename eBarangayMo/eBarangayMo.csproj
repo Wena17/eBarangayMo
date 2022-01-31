@@ -144,6 +144,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\print.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -284,8 +285,12 @@
     <Content Include="Views\Home\CertRequest.cshtml" />
     <Content Include="Views\Home\brgyOffPage.cshtml" />
     <Content Include="Views\Home\CertRequests.cshtml" />
+    <Content Include="Views\Home\DocumentUploading.cshtml" />
+    <Content Include="Views\Home\Residents.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UploadedFile\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

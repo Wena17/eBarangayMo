@@ -7,12 +7,14 @@ using eBarangayMo.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.IO;
 
 namespace eBarangayMo.Controllers
 {
     public class HomeController : Controller
     {
         string connBrgy = ConfigurationManager.ConnectionStrings["eBarangayMoDBFCONN"].ConnectionString;
+        
         public ActionResult Index()
         {
             return View();
@@ -74,7 +76,6 @@ namespace eBarangayMo.Controllers
         }
         public ActionResult CertRequests()
         {
-            //TODO: Return a page that shows all the request of the specific user
             CertificateRequests req = new CertificateRequests();
             DataSet ds = new DataSet();
             List<CertificateRequests> requestsList = new List<CertificateRequests>();
@@ -178,9 +179,12 @@ namespace eBarangayMo.Controllers
                         cmd.Parameters.AddWithValue("@pass", pass);
                         cmd.Parameters.AddWithValue("@phoneNum", phoneNum);
                         cmd.Parameters.AddWithValue("@residentID", residentID);
-                        cmd.Parameters.AddWithValue("@role", role);
-                        cmd.Parameters.AddWithValue("@officialID", officialID);
-                        cmd.Parameters.AddWithValue("@username", username);
+                        if (role.Length < 1) { cmd.Parameters.AddWithValue("@role", DBNull.Value); }
+                        else { cmd.Parameters.AddWithValue("@role", role); }
+                        if (officialID.Length < 1) { cmd.Parameters.AddWithValue("@officialID", DBNull.Value); }
+                        else { cmd.Parameters.AddWithValue("@officialID", officialID); }
+                        if (username.Length < 1) { cmd.Parameters.AddWithValue("@username", DBNull.Value); }
+                        else { cmd.Parameters.AddWithValue("@username", username); }
 
                         var ctr = cmd.ExecuteNonQuery();
                         if (ctr >= 1)
@@ -229,7 +233,12 @@ namespace eBarangayMo.Controllers
                             Session["lname"] = rdr["LNAME"];
                             Session["fname"] = rdr["FNAME"];
                             Session["mname"] = rdr["MNAME"];
-                            Session["residentID"] = rdr["RESIDENTID"];
+                            Session["residentID"] = rdr["RESIDENTID"].ToString();
+                            var offID = rdr["OFFICIALID"];
+                            if (offID != System.DBNull.Value)
+                            {
+                                Session["officialID"] = offID;
+                            }
                             flag = 1;
                         }
                         data.Add(new
@@ -283,6 +292,93 @@ namespace eBarangayMo.Controllers
                 Response.Write(ex.ToString());
             }
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult DocumentUploading()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DocumentUploading(HttpPostedFileBase file)
+        {
+            string saveDIR = Server.MapPath("/UploadedFile");
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    //var filename = string.Format(@"{0}", Guid.NewGuid());
+                    string filename = Server.HtmlEncode(file.FileName);
+                    string extension = System.IO.Path.GetExtension(file.FileName);
+                    //TODO: Check if the file already exist only for a specific user
+                    if (System.IO.File.Exists(Path.Combine(saveDIR, filename))) 
+                    {
+                        ViewBag.Message = "File already exist";
+                        return View();
+                    }
+                    else
+                    {
+                        string savePath = Path.Combine(saveDIR, filename);
+                        file.SaveAs(savePath);
+                        ViewBag.Message = "Your file was uploaded successfully.";
+                        return View();
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Upload Failed: Try again";
+                    return View();
+                }
+            }
+            catch (Exception)
+            {
+                ViewBag.Message = "Upload Failed: Try again";
+                return View();
+            }
+        }
+
+        public ActionResult Residents()
+        {
+            Resident res = new Resident();
+            DataSet ds = new DataSet();
+            List<Resident> resList = new List<Resident>();
+
+            try
+            {
+
+            } catch (Exception)
+            {
+                using (var db = new SqlConnection(connBrgy))
+                {
+                    if(db.State == ConnectionState.Closed)
+                    {
+                        db.Open();
+                    }
+                    using(var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = "SELECT * FROM ACCOUNT";
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(ds);
+                        for(int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            Resident residentObj = new Resident();
+                            residentObj.id = ds.Tables[0].Rows[i]["RESIDENTID"].ToString();
+                            residentObj.name = ds.Tables[0].Rows[i]["LNAME" + "MNAME" + "LNAME"].ToString();
+                            residentObj.bDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["BIRTHDATE"].ToString());
+                            residentObj.age = Convert.ToInt32(ds.Tables[0].Rows[i]["AGE"].ToString());
+                            residentObj.civilStat = ds.Tables[0].Rows[i]["CIVILSTAT"].ToString();
+                            residentObj.vitalStat = ds.Tables[0].Rows[i]["VITALSTAT"].ToString();
+                            residentObj.email = ds.Tables[0].Rows[i]["EMAIL"].ToString();
+                            residentObj.phoneNo = ds.Tables[0].Rows[i]["PHONENUM"].ToString();
+                            resList.Add(residentObj);
+                        }
+                        res.residentsList = resList;
+                    }
+                }
+            }
+            return View(resList);
         }
 
     }

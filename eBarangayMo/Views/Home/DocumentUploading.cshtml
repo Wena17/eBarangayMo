@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "DocumentUploading";
+}
+
+<h2>DocumentUploading</h2>
+
+@using (Html.BeginForm("DocumentUploading", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        @Html.TextBox("file", "", new { type = "file", accept = "image/jpeg,image/png,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" }) <br />
+        <div id="msg">@ViewBag.Message</div>
+        <input id="submit" type="submit" value="Upload" disabled />
+    </div>
+
+}
+
+<script>
+    const input = document.getElementById("file")
+    const msg = document.getElementById("msg")
+    const button = document.getElementById("submit")
+    input.addEventListener("change", updateMessage)
+
+    function updateMessage() {
+        const currentFiles = input.files
+        if (currentFiles.length === 1) {
+            if (currentFiles[0].size >= 4 * 1024 * 1024) {
+                msg.textContent = "File is too large. Please select a smaller one."
+                button.disabled = true
+            } else if (validFileType(currentFiles[0])) {
+                msg.textContent = ""
+                button.disabled = false
+            } else {
+                msg.textContent = "File type is not allowed."
+                button.disabled = true
+            }
+        } else {
+            button.disabled = true
+            msg.textContent = "No file selected."
+        }
+    }
+
+    const fileTypes = [
+        "image/jpeg",
+        "image/png",
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ];
+
+    function validFileType(file) {
+        return fileTypes.includes(file.type) || file.name.endsWith(".docx");
+    }
+
+</script>
