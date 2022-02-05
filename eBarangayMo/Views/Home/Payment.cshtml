@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Payment";
+}
+
+<!DOCTYPE html>
+
+<html>
+<body>
+    <div class="row">
+        <div class="col-md-7 mx-auto">
+            <div class="card shadow-lg mb-4 bg-transparent mt-5">
+                <div class="card-header">
+                    <div class="form-group d-flex justify-content-between">
+                        <h3 class="text-center font-weight-light my-2">&nbsp;</h3>
+                        <h3 class="font-weight-light my-2">Certificate Payment</h3>
+                        <input class=" btn font-weight-bolder text-dark" id="btnclose" type="button" value="X" />
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="requestTypeForm" method="post" action="">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label for="request-id-select">Request ID</label>
+                                <div class="form-group">
+                                    <input class="form-control" list="request-id-list" id="request-id-select" type="number" name="selected-request-id" />
+                                    <datalist id="request-id-list">
+                                        @foreach (var rid in ViewBag.RequestIdList) { 
+                                            <option value="@rid" />
+                                        }
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtAmount">Amount to be Paid</label>
+                                <div class="form-group">
+                                    <input class="form-control" id="txtAmount" type="number" required min="1" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6 ml-auto">
+                                <div class="form-group">
+                                    <input class="btn btn-success btn-block" id="btnSubmit" type="submit" value="Save" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

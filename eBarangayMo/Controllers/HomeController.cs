@@ -68,13 +68,13 @@ namespace eBarangayMo.Controllers
                 model.msg = tcon.createCertRequest(model);
                 if (model.msg == null)
                 {
-                    return Redirect("/Home/CertRequests"); 
+                    return Content("<script language='javascript' type='text/javascript'>alert('Request Succesfully Sent! Visit the Barangay hall to pay and fetch your Certificate');window.location.href='/Home/MyRequests';</script>");
                 } 
             }
                 ViewBag.VBtypelist = new SelectList(typeList, "id", "name");
                 return View(model);
         }
-        public ActionResult CertRequests()
+        public ActionResult MyRequests()
         {
             CertificateRequests req = new CertificateRequests();
             DataSet ds = new DataSet();
@@ -302,15 +302,14 @@ namespace eBarangayMo.Controllers
         [HttpPost]
         public ActionResult DocumentUploading(HttpPostedFileBase file)
         {
+            Document model = new Document();
             string saveDIR = Server.MapPath("/UploadedFile");
             try
             {
                 if (file.ContentLength > 0)
                 {
-                    //var filename = string.Format(@"{0}", Guid.NewGuid());
                     string filename = Server.HtmlEncode(file.FileName);
                     string extension = System.IO.Path.GetExtension(file.FileName);
-                    //TODO: Check if the file already exist only for a specific user
                     if (System.IO.File.Exists(Path.Combine(saveDIR, filename))) 
                     {
                         ViewBag.Message = "File already exist";
@@ -318,9 +317,19 @@ namespace eBarangayMo.Controllers
                     }
                     else
                     {
+                        model.filename = filename;
                         string savePath = Path.Combine(saveDIR, filename);
-                        file.SaveAs(savePath);
-                        ViewBag.Message = "Your file was uploaded successfully.";
+                        if (model.filename.Length > 0)
+                        {
+                            
+                            model.msg = tcon.DBDocument(model, Session["officialID"]);
+                            file.SaveAs(savePath);
+                            if (model.msg == null)
+                            {
+                                // TODO: link to document list
+                                return Content("<script language='javascript' type='text/javascript'>alert('Your file was uploaded successfully.');window.location.href='/Home/Index';</script>");
+                            }
+                        }
                         return View();
                     }
                 }
@@ -337,6 +346,7 @@ namespace eBarangayMo.Controllers
             }
         }
 
+
         public ActionResult Residents()
         {
             Resident res = new Resident();
@@ -345,27 +355,24 @@ namespace eBarangayMo.Controllers
 
             try
             {
-
-            } catch (Exception)
-            {
                 using (var db = new SqlConnection(connBrgy))
                 {
-                    if(db.State == ConnectionState.Closed)
+                    if (db.State == ConnectionState.Closed)
                     {
                         db.Open();
                     }
-                    using(var cmd = db.CreateCommand())
+                    using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "SELECT * FROM ACCOUNT";
+                        cmd.CommandText = "SELECT *, (FNAME + ' ' + MNAME + ' ' + LNAME) as NAME FROM ACCOUNT";
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(ds);
-                        for(int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             Resident residentObj = new Resident();
                             residentObj.id = ds.Tables[0].Rows[i]["RESIDENTID"].ToString();
-                            residentObj.name = ds.Tables[0].Rows[i]["LNAME" + "MNAME" + "LNAME"].ToString();
+                            residentObj.name = ds.Tables[0].Rows[i]["NAME"].ToString();
                             residentObj.bDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["BIRTHDATE"].ToString());
                             residentObj.age = Convert.ToInt32(ds.Tables[0].Rows[i]["AGE"].ToString());
                             residentObj.civilStat = ds.Tables[0].Rows[i]["CIVILSTAT"].ToString();
@@ -377,8 +384,21 @@ namespace eBarangayMo.Controllers
                         res.residentsList = resList;
                     }
                 }
+            } catch (Exception)
+            {
+                
             }
             return View(resList);
+        }
+
+        public ActionResult Payment()
+        {
+            // TODO: 
+            // 1. Get the list of certificates from the database.
+            // 2. Put the list in the ViewBag
+            // 3. Return the View with the ViewBag
+            ViewBag.RequestIdList = tcon.RequestIdList();
+           return View();
         }
 
     }

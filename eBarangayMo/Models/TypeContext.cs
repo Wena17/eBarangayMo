@@ -26,7 +26,7 @@ namespace eBarangayMo.Models
             {
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "INSERT CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES ('" + model.purpose + "'," + model.copies + "," + HttpContext.Current.Session["residentID"] + "," + model.requestType + ")"; // TODO Use proper questy parameters. Add requestor ID from session.
+                cmd.CommandText = "INSERT INTO CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES ('" + model.purpose + "'," + model.copies + "," + HttpContext.Current.Session["residentID"] + "," + model.requestType + ")"; // TODO Use proper questy parameters.
                 connBrgy.Open();
                 int count = cmd.ExecuteNonQuery();
                 connBrgy.Close();
@@ -35,6 +35,50 @@ namespace eBarangayMo.Models
             catch (Exception ex)
             {
                 return ex.ToString();
+            }
+        }
+        public string DBDocument(Document model, object officialId)
+        {
+            try
+            {
+                System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "INSERT INTO DOCUMENT (filename, officialID) VALUES ('" + model.filename + "'," + officialId + ")"; 
+                connBrgy.Open();
+                int count = cmd.ExecuteNonQuery();
+                connBrgy.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+        public IEnumerable<string> RequestIdList()
+        {
+            var result = new List<string>();
+            try
+            {
+                
+                System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT Id FROM CERTIFICATEREQUEST";
+                connBrgy.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                { 
+                    while (reader.Read())
+                    {
+                        result.Add(reader["Id"].ToString());
+                    }
+                }
+                connBrgy.Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // TODO: Notify someone
+                return result;
             }
         }
     }

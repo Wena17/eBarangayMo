@@ -284,9 +284,10 @@
     <Content Include="Views\Home\IssuedCert.cshtml" />
     <Content Include="Views\Home\CertRequest.cshtml" />
     <Content Include="Views\Home\brgyOffPage.cshtml" />
-    <Content Include="Views\Home\CertRequests.cshtml" />
+    <Content Include="Views\Home\MyRequests.cshtml" />
     <Content Include="Views\Home\DocumentUploading.cshtml" />
     <Content Include="Views\Home\Residents.cshtml" />
+    <Content Include="Views\Home\Payment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UploadedFile\" />

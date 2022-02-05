@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/bootstrap-chosen.css" rel="stylesheet" />
     <style>
         .bg {
             background-image: url(https://c4.wallpaperflare.com/wallpaper/886/80/962/simple-gradient-minimalism-wallpaper-preview.jpg);
@@ -49,13 +50,13 @@
                             {
                                 <li>@Html.ActionLink("Home", "Home", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Request", "CertRequest", "Home", new { @class = "nav-item nav-link" })</li>
+                                <li>@Html.ActionLink("My Requests", "MyRequests", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Notification", "Index", "Home", new { @class = "nav-item nav-link" })</li>
                             }
                             else
                             {
                                 <li>@Html.ActionLink("Post", "brgyOffPage", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Add file", "DocumentUploading", "Home", new { @class = "nav-item nav-link" })</li>
-                                <li>@Html.ActionLink("Requests", "CertRequests", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Resident", "Residents", "Home", new { @class = "nav-item nav-link" })</li>
                             }
                             <li>@Html.ActionLink("Logout", "Logout", "Home", new { @class = "nav-item nav-link" })</li>
@@ -78,5 +79,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script src="~/Scripts/chosen.jquery.js"></script>
 </body>
 </html>

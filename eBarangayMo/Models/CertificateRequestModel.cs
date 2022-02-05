@@ -41,4 +41,9 @@ namespace eBarangayMo.Models
         public string phoneNo { get; set; }
         public List<Resident> residentsList { get; set; }
     }
+    public class Document
+    {
+        public string filename { get; set; }
+        public string msg { get; set; }
+    }
 }
