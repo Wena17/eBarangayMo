@@ -18,6 +18,12 @@ namespace eBarangayMo
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Document",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Documents", id = UrlParameter.Optional }
+            );
         }
     }
 }

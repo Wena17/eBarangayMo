@@ -71,7 +71,7 @@ namespace eBarangayMo.Models
                 
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "SELECT Id FROM CERTIFICATEREQUEST";
+                cmd.CommandText = "SELECT Id FROM CERTIFICATEREQUEST"; // TODO Filter out already paid requests.
                 connBrgy.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 { 
@@ -108,6 +108,64 @@ namespace eBarangayMo.Models
             catch (Exception ex)
             {
                 return ex.ToString();
+            }
+        }
+        public IEnumerable<Document> DocumentList()
+        {
+            // SELECT id, filename, upload, officialId FROM 
+            var result = new List<Document>();
+            try
+            {
+                System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT DOCUMENT.Id, DOCUMENT.filename, DOCUMENT.dateCreated, (ACCOUNT.FNAME + ' ' + ACCOUNT.MNAME + ' ' + ACCOUNT.LNAME) AS NAME FROM DOCUMENT LEFT JOIN ACCOUNT ON DOCUMENT.officialID = ACCOUNT.OFFICIALID";
+                connBrgy.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Document d = new Document();
+                        d.Id = Convert.ToInt32(reader["Id"].ToString());
+                        d.filename = reader["filename"].ToString();
+                        d.dateCreated = Convert.ToDateTime( reader["dateCreated"].ToString());
+                        d.uploader = reader["NAME"].ToString();
+                        result.Add(d);
+                    }
+                }
+                connBrgy.Close();
+                return result;
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+        }
+        public string DocumentFilename(int id)
+        {
+            string result = null;
+            try
+            {
+                System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT filename FROM DOCUMENT WHERE Id = @Id";
+                cmd.Parameters.AddWithValue("@Id", id);
+                connBrgy.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if(reader.Read())
+                    {
+                        result = reader["filename"].ToString();
+                    } else
+                    {
+                        result = null;
+                    }
+                }
+                connBrgy.Close();
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

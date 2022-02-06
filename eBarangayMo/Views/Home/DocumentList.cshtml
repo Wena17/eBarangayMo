@@ -3,5 +3,30 @@
     ViewBag.Title = "DocumentList";
 }
 
-<h2>DocumentList</h2>
+<h2>Document List</h2>
 
+<form>
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Filename</th>
+                <th>Date Uploaded</th>
+                <th>Uploader</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in ViewBag.DocumentList)
+            {
+                <tr>
+                    <td>@d.Id</td>
+                    <td>@d.filename</td>
+                    <td>@d.dateCreated</td>
+                    <td>@d.uploader</td>
+                    <td><button class="btn btn-secondary btn-sm" formaction="/Home/Documents/@d.Id" formmethod="get">Open</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

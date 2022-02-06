@@ -43,9 +43,11 @@ namespace eBarangayMo.Models
     }
     public class Document
     {
+        public  int Id { get; set; }
         public string filename { get; set; }
-        public string msg { get; set; }
-    }
+        public DateTime dateCreated { get; set; }
+        public string uploader { get; set; }
+        public string msg { get; set; }    }
     public class Payment
     {
         public int requestId { get; set; }

@@ -419,11 +419,34 @@ namespace eBarangayMo.Controllers
 
         public ActionResult DocumentList()
         {
+            ViewBag.DocumentList = tcon.DocumentList();
             return View();
         }
         public ActionResult IssuedCertificate()
         {
             return View();
+        }
+
+        public ActionResult Documents(int id)
+        {
+            // TODO: create a page to display 
+            string filename = tcon.DocumentFilename(id);
+            if (filename == null)
+            {
+                Session["message"] = "File not found";
+                return Redirect("/Home/DocumentList");
+            }
+            string ext = System.IO.Path.GetExtension(filename).ToLower();
+
+            //Build the File Path.
+            string path = Server.MapPath("~/UploadedFile/") + filename;
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+            Response.AppendHeader("Content-Disposition", "inline");
+            //Send the File to Download.
+            return File(bytes, MimeMapping.GetMimeMapping(ext), filename);
+
         }
 
     }
