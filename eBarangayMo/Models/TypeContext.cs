@@ -20,13 +20,18 @@ namespace eBarangayMo.Models
             return result;
         }
 
-        public string createCertRequest(CertificateRequestModel model)
+        public string createCertRequest(CertificateRequestModel model, object residentID)
         {
             try
             {
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "INSERT INTO CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES ('" + model.purpose + "'," + model.copies + "," + HttpContext.Current.Session["residentID"] + "," + model.requestType + ")"; // TODO Use proper questy parameters.
+                cmd.CommandText = "INSERT INTO CERTIFICATEREQUEST (purpose, unit, requestorID, typeID) VALUES (@purpose, @copies, @residentId, @requestType)";
+
+                cmd.Parameters.AddWithValue("@purpose", model.purpose);
+                cmd.Parameters.AddWithValue("@copies", model.copies);
+                cmd.Parameters.AddWithValue("@residentId", residentID);
+                cmd.Parameters.AddWithValue("@requestType", model.requestType);
                 connBrgy.Open();
                 int count = cmd.ExecuteNonQuery();
                 connBrgy.Close();
@@ -43,7 +48,10 @@ namespace eBarangayMo.Models
             {
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "INSERT INTO DOCUMENT (filename, officialID) VALUES ('" + model.filename + "'," + officialId + ")"; 
+                cmd.CommandText = "INSERT INTO DOCUMENT (filename, officialID) VALUES (@filename, @officialId)";
+
+                cmd.Parameters.AddWithValue("@filename", model.filename);
+                cmd.Parameters.AddWithValue("@officialId", officialId);
                 connBrgy.Open();
                 int count = cmd.ExecuteNonQuery();
                 connBrgy.Close();
@@ -77,8 +85,29 @@ namespace eBarangayMo.Models
             }
             catch (Exception ex)
             {
-                // TODO: Notify someone
+                // TODO: Notify someone 
                 return result;
+            }
+        }
+        public string PaymentLog(Payment model, object officialId)
+        {
+            try
+            {
+                System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "INSERT INTO PAYMENT (certRequestID, amount, officialID) VALUES (@requestId, @amount, @officialId)";
+
+                cmd.Parameters.AddWithValue("@requestId", model.requestId);
+                cmd.Parameters.AddWithValue("@amount", model.amount);
+                cmd.Parameters.AddWithValue("@officialId", officialId);
+                connBrgy.Open();
+                int count = cmd.ExecuteNonQuery();
+                connBrgy.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
             }
         }
     }

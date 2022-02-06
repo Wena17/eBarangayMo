@@ -58,6 +58,7 @@
                                 <li>@Html.ActionLink("Post", "brgyOffPage", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Add file", "DocumentUploading", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Resident", "Residents", "Home", new { @class = "nav-item nav-link" })</li>
+                                <li>@Html.ActionLink("Payment Log", "Payment", "Home", new { @class = "nav-item nav-link" })</li>
                             }
                             <li>@Html.ActionLink("Logout", "Logout", "Home", new { @class = "nav-item nav-link" })</li>
                         }
@@ -69,6 +70,17 @@
         </nav>
     </div>
     <div class="container body-content">
+        @if (Session["message"] != null)
+        {
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">@Session["message"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            Session["message"] = null;
+            
+        }
         @RenderBody()
         @*<hr />*@
         <footer>

@@ -65,7 +65,7 @@ namespace eBarangayMo.Controllers
             model.copies = copies.Length > 0 ? Convert.ToInt32(copies) : 1;
             if (purpose.Length > 0 && model.requestType > 0)
             {
-                model.msg = tcon.createCertRequest(model);
+                model.msg = tcon.createCertRequest(model, Session["residentID"]);
                 if (model.msg == null)
                 {
                     return Content("<script language='javascript' type='text/javascript'>alert('Request Succesfully Sent! Visit the Barangay hall to pay and fetch your Certificate');window.location.href='/Home/MyRequests';</script>");
@@ -393,12 +393,37 @@ namespace eBarangayMo.Controllers
 
         public ActionResult Payment()
         {
-            // TODO: 
-            // 1. Get the list of certificates from the database.
-            // 2. Put the list in the ViewBag
-            // 3. Return the View with the ViewBag
             ViewBag.RequestIdList = tcon.RequestIdList();
            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Payment(string selectedRequestId, string amountPaid)
+        {
+            Payment model = new Payment();
+            model.requestId = Convert.ToInt32(selectedRequestId);
+            model.amount = Convert.ToDouble(amountPaid);
+            if(selectedRequestId != null && amountPaid != null)
+            {
+                model.msg = tcon.PaymentLog(model, Session["officialID"]);
+                if(model.msg == null)
+                {
+                    Session["message"] = "Payment succeded";
+                    return RedirectToAction("IssuedCertificate");
+                    //return Content("<script language='javascript' type='text/javascript'>alert('Payment details successfully added');</script>"); 
+                }
+            }
+            Session["message"] = "Payment failed!";
+            return Redirect("/Home/Payment");
+        }
+
+        public ActionResult DocumentList()
+        {
+            return View();
+        }
+        public ActionResult IssuedCertificate()
+        {
+            return View();
         }
 
     }

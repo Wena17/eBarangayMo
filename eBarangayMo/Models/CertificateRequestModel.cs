@@ -46,4 +46,10 @@ namespace eBarangayMo.Models
         public string filename { get; set; }
         public string msg { get; set; }
     }
+    public class Payment
+    {
+        public int requestId { get; set; }
+        public double amount { get; set; }
+        public string msg { get; set; }
+    }
 }

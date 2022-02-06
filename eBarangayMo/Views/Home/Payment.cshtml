@@ -22,7 +22,7 @@
                             <div class="col-md-7">
                                 <label for="request-id-select">Request ID</label>
                                 <div class="form-group">
-                                    <input class="form-control" list="request-id-list" id="request-id-select" type="number" name="selected-request-id" />
+                                    <input class="form-control" list="request-id-list" id="request-id-select" type="number" name="selectedRequestId" />
                                     <datalist id="request-id-list">
                                         @foreach (var rid in ViewBag.RequestIdList) { 
                                             <option value="@rid" />
@@ -33,7 +33,7 @@
                             <div class="col-md-4">
                                 <label for="txtAmount">Amount to be Paid</label>
                                 <div class="form-group">
-                                    <input class="form-control" id="txtAmount" type="number" required min="1" />
+                                    <input class="form-control" id="txtAmount" type="number" required min="1" name="amountPaid"/>
                                 </div>
                             </div>
                         </div>
