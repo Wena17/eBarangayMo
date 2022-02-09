@@ -26,7 +26,7 @@
             <!--
             Before login: Home News
             Resident: Home Certificats Profile
-            Official: Home Requests Complaints 
+            Official: Home Requests Complaints
             -->
             <div>
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
@@ -56,6 +56,7 @@
                             {
                                 <li>@Html.ActionLink("Post", "brgyOffPage", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Add file", "DocumentUploading", "Home", new { @class = "nav-item nav-link" })</li>
+                                <li>@Html.ActionLink("Documents", "DocumentList", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Resident", "Residents", "Home", new { @class = "nav-item nav-link" })</li>
                                 <li>@Html.ActionLink("Payment Log", "Payment", "Home", new { @class = "nav-item nav-link" })</li>
                             }
@@ -71,15 +72,16 @@
     <div class="container body-content">
         @if (Session["message"] != null)
         {
-            <div class="alert alert-primary alert-dismissible fade show" role="alert">@Session["message"]
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            
-            Session["message"] = null;
-            
-        }
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                @Session["message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        Session["message"] = null;
+
+    }
         @RenderBody()
         @*<hr />*@
         <footer>
@@ -91,5 +93,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="https://kit.fontawesome.com/87479ca088.js" crossorigin="anonymous"></script>
 </body>
 </html>

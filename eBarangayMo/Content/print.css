@@ -5,3 +5,9 @@
 .onlyprint {
     display: initial;
 }
+
+@media print {
+    th, td {
+        color: black;
+    }
+}

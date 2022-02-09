@@ -6,27 +6,39 @@
 <h2>Document List</h2>
 
 <form>
-    <table class="table ">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Filename</th>
-                <th>Date Uploaded</th>
-                <th>Uploader</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var d in ViewBag.DocumentList)
-            {
+    @if (ViewBag.DocumentList != null)
+    {
+        <div class="form-group d-flex justify-content-center">
+            <h3 class="font-weight-light my-2">Documents</h3>
+        </div>
+        <table class="table ">
+            <thead>
                 <tr>
-                    <td>@d.Id</td>
-                    <td>@d.filename</td>
-                    <td>@d.dateCreated</td>
-                    <td>@d.uploader</td>
-                    <td><button class="btn btn-secondary btn-sm" formaction="/Home/Documents/@d.Id" formmethod="get">Open</button></td>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>Date Uploaded</th>
+                    <th>Uploader</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var d in ViewBag.DocumentList)
+                {
+                    <tr>
+                        <td>@d.Id</td>
+                        <td>@d.filename</td>
+                        <td>@d.dateCreated</td>
+                        <td>@d.uploader</td>
+                        <td><button class="btn btn-secondary btn-sm" formaction="/Home/Documents/@d.Id" formmethod="get">Open</button></td>
+                        <td><button class="btn btn-secondary btn-sm">Print</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2 class="mb-5">No Documents Available</h2>
+    }
 </form>

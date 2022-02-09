@@ -22,19 +22,16 @@ namespace eBarangayMo.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
         public ActionResult IssuedCert()
         {
+            ViewBag.IssuedCertList = tcon.IssuedCertList();
             return View();
         }
 
@@ -76,47 +73,8 @@ namespace eBarangayMo.Controllers
         }
         public ActionResult MyRequests()
         {
-            CertificateRequests req = new CertificateRequests();
-            DataSet ds = new DataSet();
-            List<CertificateRequests> requestsList = new List<CertificateRequests>();
-
-            try
-            {
-                using (var db = new SqlConnection(connBrgy))
-                {
-                    if (db.State == ConnectionState.Closed)
-                    {
-                        db.Open();
-                    }
-                    using (var cmd = db.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "SELECT * FROM CERTIFICATEREQUEST JOIN CERTTYPE ON CERTIFICATEREQUEST.typeID = CERTTYPE.id AND CERTIFICATEREQUEST.requestorID = @userID";
-                        cmd.Parameters.AddWithValue("@userID", Session["residentID"]);
-
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            CertificateRequests requestobj = new CertificateRequests();
-                            requestobj.name = ds.Tables[0].Rows[i]["name"].ToString();
-                            requestobj.price = Convert.ToDouble(ds.Tables[0].Rows[i]["price"].ToString());
-                            requestobj.purpose = ds.Tables[0].Rows[i]["purpose"].ToString();
-                            requestobj.copies = Convert.ToInt32(ds.Tables[0].Rows[i]["unit"].ToString());
-                            requestobj.requestDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["dateOfRequest"].ToString());
-                            requestsList.Add(requestobj);
-                        }
-                        req.requests = requestsList;
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Response.Write("<script>alert(' " + ex.ToString() + " ')</script>");
-            }
-
-            return View(requestsList);
+            ViewBag.MyRequestList = tcon.MyRequestList(Session["residentID"]);
+            return View();
         }
         public ActionResult brgyOffPage()
         {
@@ -326,8 +284,7 @@ namespace eBarangayMo.Controllers
                             file.SaveAs(savePath);
                             if (model.msg == null)
                             {
-                                // TODO: link to document list
-                                return Content("<script language='javascript' type='text/javascript'>alert('Your file was uploaded successfully.');window.location.href='/Home/Index';</script>");
+                                return Content("<script language='javascript' type='text/javascript'>alert('Your file was uploaded successfully.');window.location.href='/Home/DocumentList';</script>");
                             }
                         }
                         return View();
@@ -349,46 +306,8 @@ namespace eBarangayMo.Controllers
 
         public ActionResult Residents()
         {
-            Resident res = new Resident();
-            DataSet ds = new DataSet();
-            List<Resident> resList = new List<Resident>();
-
-            try
-            {
-                using (var db = new SqlConnection(connBrgy))
-                {
-                    if (db.State == ConnectionState.Closed)
-                    {
-                        db.Open();
-                    }
-                    using (var cmd = db.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "SELECT *, (FNAME + ' ' + MNAME + ' ' + LNAME) as NAME FROM ACCOUNT";
-
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                        {
-                            Resident residentObj = new Resident();
-                            residentObj.id = ds.Tables[0].Rows[i]["RESIDENTID"].ToString();
-                            residentObj.name = ds.Tables[0].Rows[i]["NAME"].ToString();
-                            residentObj.bDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["BIRTHDATE"].ToString());
-                            residentObj.age = Convert.ToInt32(ds.Tables[0].Rows[i]["AGE"].ToString());
-                            residentObj.civilStat = ds.Tables[0].Rows[i]["CIVILSTAT"].ToString();
-                            residentObj.vitalStat = ds.Tables[0].Rows[i]["VITALSTAT"].ToString();
-                            residentObj.email = ds.Tables[0].Rows[i]["EMAIL"].ToString();
-                            residentObj.phoneNo = ds.Tables[0].Rows[i]["PHONENUM"].ToString();
-                            resList.Add(residentObj);
-                        }
-                        res.residentsList = resList;
-                    }
-                }
-            } catch (Exception)
-            {
-                
-            }
-            return View(resList);
+            ViewBag.ResidentList = tcon.ResidentList();
+            return View();
         }
 
         public ActionResult Payment()
@@ -409,8 +328,7 @@ namespace eBarangayMo.Controllers
                 if(model.msg == null)
                 {
                     Session["message"] = "Payment succeded";
-                    return RedirectToAction("IssuedCertificate");
-                    //return Content("<script language='javascript' type='text/javascript'>alert('Payment details successfully added');</script>"); 
+                    return RedirectToAction("IssuedCertificate"); 
                 }
             }
             Session["message"] = "Payment failed!";
@@ -420,10 +338,6 @@ namespace eBarangayMo.Controllers
         public ActionResult DocumentList()
         {
             ViewBag.DocumentList = tcon.DocumentList();
-            return View();
-        }
-        public ActionResult IssuedCertificate()
-        {
             return View();
         }
 
@@ -437,16 +351,9 @@ namespace eBarangayMo.Controllers
                 return Redirect("/Home/DocumentList");
             }
             string ext = System.IO.Path.GetExtension(filename).ToLower();
-
-            //Build the File Path.
-            string path = Server.MapPath("~/UploadedFile/") + filename;
-
-            //Read the File data into Byte Array.
-            byte[] bytes = System.IO.File.ReadAllBytes(path);
-            Response.AppendHeader("Content-Disposition", "inline");
-            //Send the File to Download.
-            return File(bytes, MimeMapping.GetMimeMapping(ext), filename);
-
+            ViewBag.documentUrl = "/UploadedFile/" + filename;
+            ViewBag.mimeType = MimeMapping.GetMimeMapping(ext);
+            return View();
         }
 
     }

@@ -3,46 +3,40 @@
     ViewBag.Title = "IssuedCert";
 }
 
-<html>
-<body>
-    <div class="row">
-        <div class="col-md-5 mx-auto">
-            <div class="card shadow-lg mb-4">
-                <div class="card-header">
-                    <div class="form-group d-flex justify-content-between">
-                        <h3 class="text-center font-weight-light my-2">&nbsp;</h3>
-                        <h3 class="font-weight-light my-2">Send Money</h3>
-                        <input class=" btn font-weight-bolder text-dark" id="btnclose" type="button" value="X" />
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <label for="txtReceiver">Send to</label>
-                            <div class="form-group">
-                                <input class="form-control" id="txtReceiver" type="text" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="txtAmount">Amount</label>
-                            <div class="form-group">
-                                <input class="form-control" id="txtAmount" type="text" />
-                            </div>
-                        </div>
-                    </div><br />
-                    <div class="row">
-                        <div class="col-md-4 ml-auto">
-                            <div class="form-group">
-                                <input class="btn btn-success btn-block" id="btnSubmit" type="submit" value="Proceed" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<form>
+    
+    @if (ViewBag.IssuedCertList != null)
+    {
+        <div class="form-group d-flex justify-content-center">
+            <h3 class="font-weight-light my-2">Issued Certificate</h3>
         </div>
-    </div>
-</body>
-</html>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>Certificate</th>
+                    <th>Price</th>
+                    <th>No. of Copies</th>
+                    <th>Issued Date</th>
+                    <th>Issued By</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in ViewBag.IssuedCertList)
+                {
+                    <tr>
+                        <td>@d.certName</td>
+                        <td>@d.price</td>
+                        <td>@d.copies</td>
+                        <td>@d.issuedDate</td>
+                        <td>@d.officialName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2 class="mb-5">No Documents Available</h2>
+    }
+</form>
 

@@ -13,21 +13,10 @@ namespace eBarangayMo.Models
         public string name { get; set; }
         public double price { get; set; }
         public string purpose { get; set; }
-        public int copies { get; set; }        
-        public SelectList TypeList { get; set; }
-        public string msg { get; set;  }
-
-
-      
-    }
-    public class CertificateRequests
-    {
-        public string name { get; set; }
-        public double price { get; set; }
-        public string purpose { get; set; }
         public int copies { get; set; }
         public DateTime requestDate { get; set; }
-        public List<CertificateRequests> requests { get; set; }
+        public SelectList TypeList { get; set; }
+        public string msg { get; set;  }      
     }
     public class Resident
     {
@@ -39,7 +28,6 @@ namespace eBarangayMo.Models
         public string vitalStat { get; set; }
         public string email { get; set; }
         public string phoneNo { get; set; }
-        public List<Resident> residentsList { get; set; }
     }
     public class Document
     {
@@ -53,5 +41,14 @@ namespace eBarangayMo.Models
         public int requestId { get; set; }
         public double amount { get; set; }
         public string msg { get; set; }
+    }
+
+    public class IssuedCert
+    {
+        public string certName { get; set; }
+        public double price { get; set; }
+        public int copies { get; set; }
+        public DateTime issuedDate { get; set; }
+        public string officialName { get; set; }
     }
 }

@@ -289,7 +289,7 @@
     <Content Include="Views\Home\Residents.cshtml" />
     <Content Include="Views\Home\Payment.cshtml" />
     <Content Include="Views\Home\DocumentList.cshtml" />
-    <Content Include="Views\Home\IssuedCertificate.cshtml" />
+    <Content Include="Views\Home\Documents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UploadedFile\" />

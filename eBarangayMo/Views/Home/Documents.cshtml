@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "Documents";
+}
+
+<p class="noprint"><a href="javascript:window.print()">Click to Print This Page</a></p>
+
+<object data="@ViewBag.documentUrl" type="@ViewBag.mimeType" width="100%" height="100%">
+    <p>Your browser does not support this document format. Download the document <a href="@ViewBag.documentUrl">here</a>.</p>
+</object>
