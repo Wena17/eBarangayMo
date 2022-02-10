@@ -15,9 +15,10 @@
                 <tr>
                     <th>Certificate</th>
                     <th>Price</th>
-                    <th>No. of Copies</th>
+                    <th class="text-center">No. of Copies</th>
                     <th>Issued Date</th>
                     <th>Issued By</th>
+                    <th>Issued To</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,10 +26,11 @@
                 {
                     <tr>
                         <td>@d.certName</td>
-                        <td>@d.price</td>
-                        <td>@d.copies</td>
-                        <td>@d.issuedDate</td>
+                        <td >@d.price</td>
+                        <td class="text-center">@d.copies</td>
+                        <td>@d.issuedDate.Date.ToString("dd/MM/yyyy")</td>
                         <td>@d.officialName</td>
+                        <td>@d.residentName</td>
                     </tr>
                 }
             </tbody>

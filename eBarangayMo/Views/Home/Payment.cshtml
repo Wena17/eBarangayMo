@@ -22,10 +22,10 @@
                             <div class="col-md-7">
                                 <label for="request-id-select">Request ID</label>
                                 <div class="form-group">
-                                    <input class="form-control" list="request-id-list" id="request-id-select" type="number" name="selectedRequestId" />
+                                    <input class="form-control" list="request-id-list" id="request-id-select" type="number" name="selectedRequestId" onchange="updateAmount();" />
                                     <datalist id="request-id-list">
-                                        @foreach (var rid in ViewBag.RequestIdList) { 
-                                            <option value="@rid" />
+                                        @foreach (var req in ViewBag.RequestList) { 
+                                            <option value="@req.id.ToString()" />
                                         }
                                     </datalist>
                                 </div>
@@ -33,7 +33,7 @@
                             <div class="col-md-4">
                                 <label for="txtAmount">Amount to be Paid</label>
                                 <div class="form-group">
-                                    <input class="form-control" id="txtAmount" type="number" required min="1" name="amountPaid"/>
+                                    <input class="form-control" id="txtAmount" type="number" name="amountPaid" required readonly/>
                                 </div>
                             </div>
                         </div>
@@ -51,6 +51,21 @@
             </div>
         </div>
     </div>
+    <script>
+        const amounts = new Map();
+        @foreach (var r in ViewBag.RequestList) {
+            <text>amounts.set("@r.id", @(r.copies * r.price));</text>
+        }
+
+        const list = document.getElementById('request-id-select')
+        const amountField = document.getElementById('txtAmount')
+
+        function updateAmount() {
+            var id = list.value
+            var amount = amounts.get(id)
+            amountField.value = amount
+        }
+    </script>
 </body>
 </html>
 

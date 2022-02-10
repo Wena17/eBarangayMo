@@ -50,5 +50,6 @@ namespace eBarangayMo.Models
         public int copies { get; set; }
         public DateTime issuedDate { get; set; }
         public string officialName { get; set; }
+        public string residentName { get; set; }
     }
 }

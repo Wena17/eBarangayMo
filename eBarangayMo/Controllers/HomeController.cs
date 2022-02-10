@@ -14,7 +14,9 @@ namespace eBarangayMo.Controllers
     public class HomeController : Controller
     {
         string connBrgy = ConfigurationManager.ConnectionStrings["eBarangayMoDBFCONN"].ConnectionString;
-        
+
+
+        TypeContext tcon = new TypeContext();
         public ActionResult Index()
         {
             return View();
@@ -25,17 +27,11 @@ namespace eBarangayMo.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            return View();
-        }
         public ActionResult IssuedCert()
         {
             ViewBag.IssuedCertList = tcon.IssuedCertList();
             return View();
         }
-
-        TypeContext tcon = new TypeContext();
         public ActionResult CertRequest()
         {
             CertificateRequestModel model = new CertificateRequestModel();
@@ -78,23 +74,63 @@ namespace eBarangayMo.Controllers
         }
         public ActionResult brgyOffPage()
         {
-            if (Session["email"] == null)
-            {
-                Response.Redirect("~/");
-            }
-
             return View();
         }
+        public ActionResult fileComplaint()
+        {
+            var data = new List<object>();
+            var complaint = Request["complaint"];
+            var proof = Request["proof"];
+            var witness = Request["witness"];
+            var date = Request["date"];
+
+            try
+            {
+                using (var db = new SqlConnection(connBrgy))
+                {
+                    db.Open();
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = " INSERT INTO COMPLAINT ( RESIDENTID, NAME, DATE, COMPLAINT, PROOF, WITNESS ) VALUES( @residentid, @name, @date, @complaint, @proof, @witness )";
+
+                        cmd.Parameters.AddWithValue("@residentid", Session["RESIDENTID"]);
+                        cmd.Parameters.AddWithValue("@name", Session["LNAME"].ToString() + " , " + Session["FNAME"].ToString());
+                        cmd.Parameters.AddWithValue("@date", date);
+                        cmd.Parameters.AddWithValue("@complaint", complaint);
+                        cmd.Parameters.AddWithValue("@proof", proof);
+                        cmd.Parameters.AddWithValue("@witness", witness);
+                        var ctr = cmd.ExecuteNonQuery();
+
+                        if (ctr >= 1)
+                        {
+                            data.Add(new
+                            {
+                                mess = 1,
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex);
+            }
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
 
         public ActionResult Logout()
         {
             Session.Abandon();
             Session.RemoveAll();
             Session["email"] = null;
+            Session["username"] = null;
             Session["password"] = null;
             Session.Clear();
             Response.Redirect("~/");
             return View();
+
         }
 
 
@@ -104,7 +140,6 @@ namespace eBarangayMo.Controllers
             var lname = Request["lastname"];
             var fname = Request["firstname"];
             var mname = Request["middlename"];
-            var age = Request["age"];
             var birthdate = Request["bdate"];
             var civilStat = Request["civilStat"];
             string lifeStat = "Alive";
@@ -115,7 +150,12 @@ namespace eBarangayMo.Controllers
             var role = Request["role"];
             var officialID = Request["officialID"];
             var username = Request["username"];
-
+            DateTime dob = Convert.ToDateTime(birthdate);
+            var age = DateTime.Now.Year - dob.Year;
+            if (DateTime.Now.DayOfYear < dob.DayOfYear)
+            {
+                age = age - 1;
+            }
             try
             {
                 using (var db = new SqlConnection(connBrgy))
@@ -137,12 +177,9 @@ namespace eBarangayMo.Controllers
                         cmd.Parameters.AddWithValue("@pass", pass);
                         cmd.Parameters.AddWithValue("@phoneNum", phoneNum);
                         cmd.Parameters.AddWithValue("@residentID", residentID);
-                        if (role.Length < 1) { cmd.Parameters.AddWithValue("@role", DBNull.Value); }
-                        else { cmd.Parameters.AddWithValue("@role", role); }
-                        if (officialID.Length < 1) { cmd.Parameters.AddWithValue("@officialID", DBNull.Value); }
-                        else { cmd.Parameters.AddWithValue("@officialID", officialID); }
-                        if (username.Length < 1) { cmd.Parameters.AddWithValue("@username", DBNull.Value); }
-                        else { cmd.Parameters.AddWithValue("@username", username); }
+                        cmd.Parameters.AddWithValue("@role", role);
+                        cmd.Parameters.AddWithValue("@officialID", officialID);
+                        cmd.Parameters.AddWithValue("@username", username);
 
                         var ctr = cmd.ExecuteNonQuery();
                         if (ctr >= 1)
@@ -158,15 +195,16 @@ namespace eBarangayMo.Controllers
             }
             catch (Exception ex)
             {
-                Response.Write(ex.ToString());
+                Response.Write(ex);
             }
             return Json(data, JsonRequestBehavior.AllowGet);
+
         }
 
         public ActionResult Login()
         {
             var data = new List<object>();
-            var email = Request["email"];
+            var username = Request["email"];
             var pass = Request["password"];
             var flag = 0;
 
@@ -178,15 +216,15 @@ namespace eBarangayMo.Controllers
                     using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = cmd.CommandText = "SELECT * FROM [ACCOUNT] WHERE USERNAME = '" + email + "' OR EMAIL = '" + email + "' AND PASS = '" + pass + "'";
+                        cmd.CommandText = cmd.CommandText = "SELECT * FROM [ACCOUNT] WHERE USERNAME = '" + @username + "' OR EMAIL = '" + @username + "' AND PASS = '" + @pass + "'";
 
-                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@username", username);
                         cmd.Parameters.AddWithValue("@pass", pass);
                         SqlDataReader rdr = cmd.ExecuteReader();
 
                         if (rdr.Read())
                         {
-                            Session["email"] = email;
+                            Session["username"] = username;
                             Session["password"] = pass;
                             Session["lname"] = rdr["LNAME"];
                             Session["fname"] = rdr["FNAME"];
@@ -208,15 +246,17 @@ namespace eBarangayMo.Controllers
             }
             catch (Exception ex)
             {
-                Response.Write(ex.ToString());
+                Response.Write(ex);
             }
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);            
         }
+        
 
         public ActionResult Post()
         {
             var data = new List<object>();
             var post = Request["post"];
+            var datetime = Request["dateTime"];
 
             try
             {
@@ -226,11 +266,11 @@ namespace eBarangayMo.Controllers
                     using (var cmd = db.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = " INSERT INTO ACTIVITIES ( POST, NAME ) VALUES( @post, @name )";
+                        cmd.CommandText = " INSERT INTO ACTIVITIES ( POST, NAME, DATETIME ) VALUES( @post, @name, @datetime )";
 
                         cmd.Parameters.AddWithValue("@post", post);
-                        cmd.Parameters.AddWithValue("@name", Session["LNAME"].ToString() + " , " + Session["FNAME"].ToString() + " , " + Session["MNAME"].ToString());
-
+                        cmd.Parameters.AddWithValue("@name", Session["LNAME"].ToString() + " , " + Session["FNAME"].ToString());
+                        cmd.Parameters.AddWithValue("@datetime", datetime);
                         var ctr = cmd.ExecuteNonQuery();
 
                         if (ctr >= 1)
@@ -240,17 +280,58 @@ namespace eBarangayMo.Controllers
                                 mess = 1,
                             });
                         }
-
-
                     }
                 }
             }
             catch (Exception ex)
             {
-                Response.Write(ex.ToString());
+                Response.Write(ex);
             }
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult displayNaU()
+        {
+            var data = new List<object>();
+            try
+            {
+                using (var db = new SqlConnection(connBrgy))
+                {
+                    db.Open();
+                    using (var cmd = db.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = "SELECT * FROM ACTIVITIES ORDER BY DATETIME DESC";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            data.Add(new
+                            {
+                                post = reader["POST"].ToString(),
+                                name = reader["NAME"].ToString(),
+                                datetime = reader["DATETIME"].ToString(),
+                                //time = reader["TIME"].ToString(),
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex);
+            }
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult residentPage()
+        {
+            if (Session["email"] == null)
+            {
+                Response.Redirect("~/");
+            }
+
+            return View();
+        } 
+
 
         [HttpGet]
         public ActionResult DocumentUploading()
@@ -312,8 +393,8 @@ namespace eBarangayMo.Controllers
 
         public ActionResult Payment()
         {
-            ViewBag.RequestIdList = tcon.RequestIdList();
-           return View();
+            ViewBag.RequestList = tcon.RequestList();
+            return View();
         }
 
         [HttpPost]
@@ -328,7 +409,7 @@ namespace eBarangayMo.Controllers
                 if(model.msg == null)
                 {
                     Session["message"] = "Payment succeded";
-                    return RedirectToAction("IssuedCertificate"); 
+                    return RedirectToAction("IssuedCert"); 
                 }
             }
             Session["message"] = "Payment failed!";
@@ -343,7 +424,6 @@ namespace eBarangayMo.Controllers
 
         public ActionResult Documents(int id)
         {
-            // TODO: create a page to display 
             string filename = tcon.DocumentFilename(id);
             if (filename == null)
             {

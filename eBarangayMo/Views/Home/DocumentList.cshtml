@@ -19,7 +19,6 @@
                     <th>Date Uploaded</th>
                     <th>Uploader</th>
                     <th>&nbsp;</th>
-                    <th>&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +30,6 @@
                         <td>@d.dateCreated</td>
                         <td>@d.uploader</td>
                         <td><button class="btn btn-secondary btn-sm" formaction="/Home/Documents/@d.Id" formmethod="get">Open</button></td>
-                        <td><button class="btn btn-secondary btn-sm">Print</button></td>
                     </tr>
                 }
             </tbody>

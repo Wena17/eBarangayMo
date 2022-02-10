@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "fileComplaint";
+}
+
+<html>
+<body>
+    <div class="d-flex justify-content-center">
+        @* file complaint *@
+        <div class="card w-50" style="background-color: rgba(0,0,0,.5);">
+            <div class="card-body">
+                <h5 class="text-center">File a Complaint</h5>
+                <hr class="bg-light" />
+                <div class="row">
+                    @*      COMPLAINT      *@
+                    <div class="col">
+                        <div class="form-group-sm">
+                            <label>Complaint</label>
+                            <div class="input-group">
+                                <input id="txtcomplaint" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @*      PROOF      *@
+                    <div class="col">
+                        <div class="form-group-sm">
+                            <label> Proof </label>
+                            <div class="input-group">
+                                <input id="txtproof" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @*      WITNESS      *@
+                    <div class="col">
+                        <div class="form-group-sm">
+                            <label> Witness </label>
+                            <div class="input-group">
+                                <input id="txtwitness" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="d-flex justify-content-center">
+                    <button id="btncomplaint" class="btn" style="background: linear-gradient(to right, #5bc0de, #9dd9eb);">Complaint</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/MyScript/fileComplaint.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "brgyOffPage";
+    ViewBag.Title = "residentPage";
 }
 
 <html>
@@ -33,34 +33,14 @@
 </head>
 <body>
     <div class="d-flex justify-content-center">
-        @* post news and updates *@
-        <div class="card w-50" style="background-color: rgba(0,0,0,.5);">
-            <div class="card-body">
-                <h5 class="text-center">Post news and event</h5>
-                <hr class="bg-light" />
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group-lg">
-                            <div class="input-group">
-                                <textarea class="form-control" id="txtPostNews" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div class="d-flex justify-content-center">
-                    <button id="btnPost" class="btn" style="background: linear-gradient(to right, #5bc0de, #9dd9eb);">Post</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br /><br />
-    <div class="d-flex justify-content-center">
         @*display news and updates*@
         <div class="card" style="background-color: rgba(0,0,0,0); border:none; width:100%">
             <div class="row">
                 <div class="col">
                     <table class="spce">
+                        @*<tr>
+                                <th style="text-align:center; background: linear-gradient(#5bc0de, #9dd9eb); color:black;"><b>News and Updates</b></th>
+                            </tr>*@
                         <tbody id="dsplyNaU">
                             <tr>
                                 <td class="space">
@@ -73,6 +53,6 @@
             </div>
         </div>
     </div>
-    <script src="~/Scripts/MyScript/brgyOffPage.js"></script>
+    <script src="~/Scripts/MyScript/residentPage.js"></script>
 </body>
 </html>

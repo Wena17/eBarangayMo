@@ -26,10 +26,12 @@ namespace eBarangayMo.Models
             {
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "SELECT CERTTYPE.name, CERTTYPE.price, CERTIFICATEREQUEST.unit, PAYMENT.dateOfPayment, (ACCOUNT.FNAME + ' ' + ACCOUNT.MNAME + ' ' + ACCOUNT.LNAME) AS NAME FROM PAYMENT " +
-                    "LEFT JOIN  CERTIFICATEREQUEST ON PAYMENT.certRequestID = CERTIFICATEREQUEST.Id AND status = 'P' " +
+                cmd.CommandText = "SELECT CERTTYPE.name, CERTTYPE.price, CERTIFICATEREQUEST.unit, PAYMENT.dateOfPayment, (ACCOUNT.FNAME + ' ' + ACCOUNT.MNAME + ' ' + ACCOUNT.LNAME) AS NAME, (RESIDENTS.FNAME + ' ' + RESIDENTS.MNAME + ' ' + RESIDENTS.LNAME) AS RNAME, RESIDENTS.RESIDENTID AS RID FROM PAYMENT " +
+                    "JOIN  CERTIFICATEREQUEST ON PAYMENT.certRequestID = CERTIFICATEREQUEST.Id " +
                     "LEFT JOIN CERTTYPE ON CERTTYPE.Id = CERTIFICATEREQUEST.typeID " +
-                    "LEFT JOIN ACCOUNT ON ACCOUNT.OFFICIALID = PAYMENT.officialID ";
+                    "LEFT JOIN ACCOUNT ON ACCOUNT.OFFICIALID = PAYMENT.officialID " + 
+                    "LEFT JOIN ACCOUNT AS RESIDENTS ON RESIDENTS.RESIDENTID = CERTIFICATEREQUEST.requestorID " +
+                    "WHERE CERTIFICATEREQUEST.status = 'P' ";
                 connBrgy.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -41,6 +43,8 @@ namespace eBarangayMo.Models
                         i.copies = Convert.ToInt32(reader["unit"].ToString());
                         i.issuedDate = Convert.ToDateTime(reader["dateOfPayment"].ToString());
                         i.officialName = reader["NAME"].ToString();
+                        if (reader["RID"] == DBNull.Value) { i.residentName = "(Unknown)";  }
+                        else { i.residentName = reader["RNAME"].ToString(); }
                         result.Add(i);
                     }
                 }
@@ -95,21 +99,25 @@ namespace eBarangayMo.Models
             }
         }
 
-        public IEnumerable<string> RequestIdList()
+        public IEnumerable<CertificateRequestModel> RequestList()
         {
-            var result = new List<string>();
+            var result = new List<CertificateRequestModel>();
             try
             {
                 
                 System.Data.SqlClient.SqlCommand cmd = connBrgy.CreateCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "SELECT Id FROM CERTIFICATEREQUEST WHERE status='N' "; 
+                cmd.CommandText = "SELECT CERTIFICATEREQUEST.Id, unit, price FROM CERTIFICATEREQUEST LEFT JOIN CERTTYPE ON CERTIFICATEREQUEST.typeID = CERTTYPE.Id WHERE status='N' "; 
                 connBrgy.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 { 
                     while (reader.Read())
                     {
-                        result.Add(reader["Id"].ToString());
+                        CertificateRequestModel crm = new CertificateRequestModel();
+                        crm.id = Convert.ToInt32(reader["Id"].ToString());
+                        crm.price = Convert.ToDouble(reader["price"].ToString());
+                        crm.copies = Convert.ToInt32(reader["unit"].ToString());
+                        result.Add(crm);
                     }
                 }
                 connBrgy.Close();
